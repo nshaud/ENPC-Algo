@@ -1,110 +1,64 @@
-\documentclass{beamer}
-%\usepackage[utf8]{inputenc}
-%\usepackage[T1]{fontenc}
-\usepackage[french]{babel}
-\usepackage{hyperref}
-\usepackage{graphicx}
-\usepackage{amsmath,amssymb}
-\usepackage{tabularx}
-\usepackage{booktabs}
-\usepackage[compatibility=false]{caption}
-\usepackage[toc,page]{appendix}
-\usepackage{minted}
-
-\newcolumntype{Y}{>{\centering\arraybackslash}X}
-
-\usetheme[numbering=fraction,block=fill,progressbar=frametitle]{metropolis} %Use metropolis theme
-
-\definecolor{bg}{rgb}{0.95,0.95,0.95}
-\setminted{bgcolor=bg,fontsize=\scriptsize,autogobble,mathescape,breaklines,tabsize=2}
-\setmintedinline{fontsize=\normalsize}
-
-\begin{document}
-%\setbeamertemplate{blocks}[rounded]
-\title{Algorithmie - Complexité et structures de données}
+\input{../preamble.tex}
 \date[15 fév. 2017]{Mercredi 15 février 2017}
-\author[nicolas.audebert@onera.fr]{Nicolas Audebert}
-\institute{}
-%\titlegraphic{\includegraphics[width=0.3\textwidth]{logo-ponts}}
-
-\setmainfont{Fira Sans}
+\subtitle{Complexité et structures de données}
 \maketitle
-
-
-\AtBeginSection[]{
-  \begin{frame}{Plan de la séance}
-  \small \tableofcontents[currentsection, hideothersubsections]
-  \end{frame}
-}
-
-\newcommand{\todo}[1]{\textbf{[TODO: #1]}}
 
 \begin{frame}{Ressources, polycopié, TD, email}
 
 \begin{block}{Ressources du cours}
     \begin{itemize}
-    \item \textbf{Site web du cours :} \url{http://imagine.enpc.fr/~monasse/Algo}
-    \item \textbf{Mes slides :} \url{https://nicolas.audebert.at/teaching/algo/}
+    \item \textbf{Site du cours :} \url{http://imagine.enpc.fr/~monasse/Algo}
+    \item \textbf{Slides :} \url{https://nicolas.audebert.at/teaching/ENPC/}
+    \item \textbf{Email :} \href{mailto:nicolas.audebert@onera.fr}{\texttt{nicolas.audebert@onera.fr}}
     \end{itemize}
 \end{block}
 
-\begin{exampleblock}{Contact}
-    \textbf{Email :} \href{mailto:nicolas.audebert@onera.fr}{nicolas.audebert@onera.fr}
-\end{exampleblock}
+\centering
+\includegraphics[width=0.40\textwidth]{../qrcode_algo}
+\includegraphics[width=0.40\textwidth]{../qrcode_slides}
 
 \end{frame}
 
-\section{Qu'est-ce que l'algorithmie ?}
+\section{Qu'est-ce que l'algorithmique ?}
 \begin{frame}{Pourquoi ce cours ?}
 
+\uncover<1>{
 \begin{block}{Introduction à la programmation C++}
-Apprendre à manipuler le C++ comme outil.
-\end{block}
+Apprendre à manipuler le C++ comme \textbf{}outil.
+  \begin{itemize}
+    \item Savoir programmer.
+    \item Concevoir un logiciel.
+    \item Tester et compiler.
+  \end{itemize}
+\end{block}}
 
-\begin{block}{Algorithmie}
-Apprendre à l'informatique comme discipline.
+\uncover<2>{
+\begin{block}{Algorithmique}
+Apprendre l'informatique comme \textbf{discipline scientifique}.
     \begin{itemize}
-        \item Qu'est-ce qu'un algorithme ? Un bon algorithme ?
-        \item Comment évaluer et comparer différents algorithmes ?
+        \item Qu'est-ce qu'un \textbf{algorithme} ? Un \textbf{bon} algorithme ?
+        \item Comment \textbf{évaluer} et comparer différents algorithmes ?
         \item Quels sont les algorithmes classiques pour mon problème ?
     \end{itemize}
-\end{block}
+\end{block}}
 
 \end{frame}
 
 \begin{frame}{Algorithme}
 
 \begin{block}{Qu'est-ce qu'un algorithme ?}
-Un algorithme est une procédure comportant une suite finie d'opérations permettant d'obtenir un résultat à partir d'entrées connues.
+Un algorithme est une procédure comportant une \textbf{suite finie d'opérations} permettant d'obtenir un \textbf{résultat} à partir d'\textbf{entrées} connues.
 \end{block}
-
+\pause
 \begin{block}{Propriétés d'un algorithme}
-Un algorithme est une procédure :
+Un algorithme est une procédure \textbf{répétable} (par un humain):
     \begin{itemize}
-        \item répétable (par un humain),
-        \item finie (réalisable en temps borné),
-        \item non-ambigüe (bien définie),
-        \item travaillant sur des entrées spécifiées,
-        \item produisant des sorties.
+        \item<+> finie (réalisable en temps borné),
+        \item<+> non-ambigüe (bien définie),
+        \item<+> travaillant sur des entrées spécifiées,
+        \item<+> éventuellement produisant des sorties.
     \end{itemize}
 \end{block}
-
-\end{frame}
-
-
-\section{Rappels sur les tableaux}
-
-\begin{frame}{Les tableaux en C++}
-En C++ les tableaux sont de taille fixe. Cette taille peut-être déterminée soit :
-\begin{itemize}
-    \item à la compilation (tableau \textbf{statique}),
-    \item à l'exécution (tableau \textbf{dynamiques})
-\end{itemize}
-Les tableaux sont des structures difficiles à manipuler (gestion de la mémoire, mécanisme de copie inexistant, \dots).
-
-\begin{exampleblock}{Pour simplifier}
-Il est plus facile d'utiliser les vecteurs (\texttt{vector}) de la STL.
-\end{exampleblock}
 
 \end{frame}
 
@@ -114,10 +68,10 @@ Il est plus facile d'utiliser les vecteurs (\texttt{vector}) de la STL.
 
 \begin{frame}{Notion de complexité}
     \begin{block}{Définition}
-        La \textbf{complexité} d'un algorithme est une estimation du nombre d'opérations nécessaires à son exécution en fonction des \textbf{paramètres} caractéristiques du problème.
+        La \textbf{complexité} d'un algorithme est une estimation du \textbf{nombre d'opérations} nécessaires à son exécution en fonction des \textbf{paramètres} caractéristiques du problème.
     \end{block}
     \begin{exampleblock}{Remarque}
-        La complexité représente le comportement asymptotique de l'algorithme (lorsque les paramètres deviennent très grands).
+        La complexité représente le \textbf{comportement asymptotique} de l'algorithme (lorsque les paramètres deviennent très grands).
     \end{exampleblock}
 \end{frame}
 
@@ -139,8 +93,8 @@ On s'intéresse généralement à la complexité dans le pire des cas et, plus r
 \begin{itemize}
 \item La complexité en espace et en temps sont complémentaires :
   \begin{itemize}
-  \item Stocker tous les résultats (grand espace mémoire)
-  \item Calculer à chaque besoin (faible espace mémoire, peut être lent)
+  \item Stocker tous les résultats (évite le recalcul, nécessite beaucoup de mémoire)
+  \item Calculer à chaque besoin (plus de calculs redondants, peu de mémoire nécessaire)
   \end{itemize}
 \item En général, la complexité en espace n'est pas un problème et c'est le temps qui importe (par exemple, pour des applications temps réel).
 \end{itemize}
@@ -150,33 +104,35 @@ On s'intéresse généralement à la complexité dans le pire des cas et, plus r
 
 \begin{frame}[fragile]{Histogramme d'une image $W\times{H}$ : version rapide}
 \begin{columns}
-    \begin{column}{0.6\textwidth}
+    \begin{column}{0.65\textwidth}
     \begin{minted}{c}
     // On stocke les 256 valeurs de l'histogramme 
     int histo[256];
     // Initialisation à 0
     for(int i=0; i<256; i++){
-        histo[i] = 0;
+      histo[i] = 0;
     }
     // Parcours de l'image par colonne
     for(int x=0; x<image.width(); x++){
-        for(int y=0; y<image.height(); y++){
-            histo[image(x,y)]++;
-        }
+      for(int y=0; y<image.height(); y++){
+        histo[image(x,y)]++;
+      }
     }
     // Affichage de l'histogramme
     for(int i=0; i<256; i++){
-        drawRect(i,0,1,histo[i])
+      drawRect(i,0,1,histo[i])
     }
     \end{minted}
     \end{column}
     \begin{column}{0.4\textwidth}
+    \visible<2>{
     \begin{block}{Analyse}
         \textbf{Mémoire :}\\
         1 tableau de 256 cases\\
         \textbf{Temps :}\\
         $W\times{H}$ pixels visités
     \end{block}
+    }
     \end{column}
 \end{columns}
 \end{frame}
@@ -186,21 +142,22 @@ On s'intéresse généralement à la complexité dans le pire des cas et, plus r
     \begin{column}{0.65\textwidth}
     \begin{minted}{cpp}
     for(int i=0; i<256; i++){
-        // Valeur i de l'histogramme
-        int h = 0;
-        // Parcours de l'image
-        for(int x=0; x<image.width(); x++){
-            for(int y=0; y<image.height(); y++){
-                if(image(x,y) == c){
-                    h++;
-                }
-            }
+      // Valeur i de l'histogramme
+      int h = 0;
+      // Parcours de l'image
+      for(int x=0; x<image.width(); x++){
+        for(int y=0; y<image.height(); y++){
+          if(image(x,y) == c){
+            h++;
+          }
         }
-        drawRect(c,0,1,h);
+      }
+      drawRect(c,0,1,h);
     }
     \end{minted}
     \end{column}
     \begin{column}{0.35\textwidth}
+    \visible<2>{
     \begin{block}{Analyse}
     \textbf{Mémoire :}\\
     Pas de tableau\\
@@ -208,6 +165,7 @@ On s'intéresse généralement à la complexité dans le pire des cas et, plus r
     256 passages sur chaque pixel\\
     $\rightarrow 256\times{W}\times{H}$
     \end{block}
+    }
     \end{column}
 \end{columns}
 \end{frame}
@@ -217,12 +175,12 @@ On s'intéresse généralement à la complexité dans le pire des cas et, plus r
 \begin{block}{Bornes de complexité}
     Le nombre d'opérations élémentaires constituant un algorithme est souvent complexe à déterminer. Pour plus de commodité, on cherche un encadrement de celui-ci, i.e. $f$ telle que :
 \begin{equation}
-k_1 \times f(N) < \text{complexité} < k_2 \times f(N)
+\exists k_1, k_2,~k_1 \times f(N) < \text{complexité} < k_2 \times f(N)
 \end{equation}
 \end{block}
 
 \begin{block}{Notation}
-    On utilise la notation $O(f(n_1, n_2, n_3, \hdots))$\\
+    On utilise la notation de Landau : $O(f(n_1, n_2, n_3, \hdots))$\\
     où $N = \{n_1, n_2, n_3, \hdots\}$ sont les paramètres caractéristiques du problème.
 \end{block}
 \end{frame}
@@ -247,12 +205,12 @@ k_1 \times f(N) < \text{complexité} < k_2 \times f(N)
 \begin{exampleblock}{Parcours des éléments d'un tableau}
 \begin{minted}{cpp}
 // Utilisation d'un tableau type vector
-// Tableau de taille $N$
+// Tableau de taille $n$
 for(int i=0; i<tab.size(); i++){
   cout << tab[i] << endl;
 }
 \end{minted}
-on accède une fois à chaque case $\rightarrow$ complexité $O(N)$
+on accède une fois à chaque case \visible<2>{$\rightarrow$ \textbf{complexité $O(n)$}}
 \end{exampleblock}
 \end{frame}
 
@@ -262,14 +220,14 @@ on accède une fois à chaque case $\rightarrow$ complexité $O(N)$
 // Unicité dans tab
 vector<bool> unique(tab.size(),false);
 for(int i=0; i<tab.size(); i++){
-    for(int j=i+1; j<tab.size(); j++){
-        if(tab[i]==tab[j]){
-            unique[i] = unique[j] = true;
-        }
+  for(int j=i+1; j<tab.size(); j++){
+    if(tab[i]==tab[j]){
+      unique[i] = unique[j] = true;
     }
+  }
 }
 \end{minted}
-deux parcours imbriqués $\rightarrow$ complexité $O(N^2)$
+deux parcours imbriqués \visible<2>{$\rightarrow$ complexité $O(n^2)$}
 \end{exampleblock}
 \end{frame}
 
@@ -285,7 +243,7 @@ Le choix de l'implémentation dépend de l'application et influe beaucoup sur le
         s+= i;
     }
     \end{minted}
-    Complexité $O(n)$.
+    \visible<2->{Complexité $O(n)$.}
     \end{block}
     \end{column}
     \begin{column}{0.5\textwidth}
@@ -293,13 +251,13 @@ Le choix de l'implémentation dépend de l'application et influe beaucoup sur le
     \begin{minted}{cpp}
     // Pré-calcul
     vector<int> pre(1000000000,0);
-    for(int i=1; i<pre.size(); i++)
-        pre[i] = i + pre[i-1];
-
+    for(int i=1; i<pre.size(); i++){
+      pre[i] = i + pre[i-1];
+    }
     // Utilisation
     int s = pre[n];
     \end{minted}
-    Complexité $O(1)$ (en utilisation).
+    \visible<3->{Complexité $O(1)$ (en utilisation).}
     \end{block}
     \end{column}
 \end{columns}
@@ -307,7 +265,7 @@ Le choix de l'implémentation dépend de l'application et influe beaucoup sur le
 
 
 \begin{frame}{Les grandes classes de complexité}
-\begin{block}{Ordres de grandeur de complexité 1/2}
+\begin{block}{Ordres de grandeur de complexité (1/2)}
 \begin{itemize}
 \item $O(1)$ : \textbf{constant}, pas d'influence des grandeurs du problème. \\
 \textit{Exemple} : accès à une case d'un tableau, somme de deux constantes.
@@ -320,7 +278,7 @@ Le choix de l'implémentation dépend de l'application et influe beaucoup sur le
 \end{frame}
 
 \begin{frame}{Les grandes classes de complexité}
-\begin{block}{Ordres de grandeur de complexité 1/2}
+\begin{block}{Ordres de grandeur de complexité (2/2)}
 \begin{itemize}
 \item $O(n\log(n))$ : \textbf{linéarithmique}, de nombreux algorithmes ``rapides''.\\
 \textit{Exemple} : Tri optimal, Fast Fourier Transform
@@ -340,8 +298,8 @@ En supposant qu'une opération élémentaire prend 10 ns, pour $n = 50$:
     \item $O(n)$ : 500 ns
     \item $O(n\log(n))$ : 850 ns
     \item $O(n^{2})$ : 25 µs
-    \item $O(2^n)$ : 130 jours
-    \item $O(n!)$ : $10^{48}$ ans
+    \item $O(2^n)$ : 130 jours ($\simeq$ 4 mois)
+    \item $O(n!)$ : $10^{48}$ ans \visible<2>{\alert{$>>> 14e^9$ (âge de l'univers)}}
 \end{itemize}
 \end{frame}
 
@@ -355,20 +313,20 @@ En supposant qu'une opération élémentaire prend 10 ns, pour $n = 50$:
 for(int i=r/2; i<W-r/2; i++){
   for(int j=r/2; j<H-r/2; j++){
     newIm[i,j] = 0;
-      for(int k=i-r/2; k<i+r/2; k++){
-        for(int m=j-r/2; m<j+r/2; m++){
-          newIm[i,j] += im(k,m);
-        }
+    for(int k=i-r/2; k<i+r/2; k++){
+      for(int m=j-r/2; m<j+r/2; m++){
+        newIm[i,j] += im(k,m);
       }
-      newIm[i,j]/= r*r;
+    }
+    newIm[i,j]/= r*r;
   }
 }
 \end{minted}
-$\rightarrow$ complexité $O(W\times{H}\times{r^2})$
+\visible<2>{$\rightarrow$ complexité $O(W\times{H}\times{r^2})$}
 \end{exampleblock}
 \end{column}
 \begin{column}{0.35\linewidth}
-\includegraphics[width=\textwidth]{images/blur.pdf}
+\includegraphics[width=\textwidth]{images/blur.jpg}
 \end{column}
 \end{columns}
 \end{frame}
@@ -376,25 +334,34 @@ $\rightarrow$ complexité $O(W\times{H}\times{r^2})$
 
 \begin{frame}{Classes de complexité}
 \begin{block}{$P$ versus $NP$}
-Les problèmes de classe $P$ sont les problèmes que l'on peut résoudre en temps polynomial.\\
-Les problèmes de classe $NP$ sont ceux pour lesquels on ne connait pas de solution en temps polynomial.
+Les problèmes de classe $P$ sont les problèmes que l'on peut résoudre en \textbf{temps polynomial}.\\
+Les problèmes de classe $NP$ sont ceux pour lesquels on \textbf{ne connait pas} de solution en temps polynomial.
 \end{block}
 
+\uncover<2->{
 \begin{exampleblock}{Example de problème $NP$}
-Un commercial doit parcourir $N = \{n_1,\dots,n_k\}$ villes séparées par les distances $d_{i,j}$. Quelle est le chemin qui minimise la distance totale parcourue ?\\
-Approche naïve : $O(n!)$, meilleur algorithme connu : $O(n^22^n)$.
+\begin{minipage}{0.24\textwidth}
+\includegraphics[width=\textwidth]{images/voyageur}
+\end{minipage}
+\begin{minipage}{0.72\textwidth}
+Un commercial doit parcourir $N = \{n_1,\dots,n_k\}$ villes séparées par les distances $d_{i,j}$. Quelle est le chemin qui minimise la distance totale parcourue ?
+\end{minipage}
+\visible<3->{Approche naïve : $O(n!)$, meilleur algorithme exact connu : $O(n^2 2^n)$.}
 \end{exampleblock}
+}
 
+\uncover<4->{
 \begin{alertblock}{Question à 1 000 000\$}
-$P = NP$ ou $P \neq NP$ ?
+$P = NP$ ou $P \neq NP$ ? \footnotesize{(problème du millénaire de l'Institut Clay)}
 \end{alertblock}
+}
 \end{frame}
 
 \begin{frame}{En pratique\dots}
     \begin{block}{Relativisons !}
         \begin{itemize}
         \item Les complexités sont asymptotiques : elles sont valables pour les grandes tailles de données. 
-        \item On omet généralement les constantes multiplicatives sont oubliées dans la notation $O()$.
+        \item On omet généralement les constantes multiplicatives dans la notation $O()$.
         \end{itemize}
     \end{block}
     \begin{exampleblock}{Exemple}
@@ -416,17 +383,27 @@ $P = NP$ ou $P \neq NP$ ?
 L'application détermine le comportement important.
 \begin{itemize}
 \item \textbf{Complexité moyenne} : requêtes dans un moteur de recherche, traitement d'image.
-\item \textbf{Complexité dans le pire des cas} :  applications critiques (aéronautique, \dots).
+\item \textbf{Complexité dans le pire des cas} : applications critiques (aéronautique, applications temps-réel\dots).
 \end{itemize}
 \end{exampleblock}
 
 \end{frame}
 
+\section{Rappels sur les tableaux}
 
+\begin{frame}{Les tableaux en C++}
+En C++ les tableaux sont de taille fixe. Cette taille peut-être déterminée soit :
+\begin{itemize}
+    \item à la compilation (tableau \textbf{statique}),
+    \item à l'exécution (tableau \textbf{dynamique})
+\end{itemize}
+Les tableaux sont des structures difficiles à manipuler (gestion de la mémoire, mécanisme de copie inexistant, \dots).
 
+\begin{exampleblock}{Pour simplifier}
+Il est plus facile d'utiliser les vecteurs (\texttt{vector}) de la STL.
+\end{exampleblock}
 
-
-
+\end{frame}
 
 \section{Structures de données}
 
@@ -458,19 +435,19 @@ Ceci implique une recopie du tableau à chaque \mintinline{cpp}{push_back}.
 
 \begin{exampleblock}<2>{Complexité}
     \centering
-    $O(N)$
+    $O(n)$
 \end{exampleblock}
 \end{frame}
 
 \begin{frame}{Complexité de l'ajout d'un élément}
- \begin{block}{Implémentation maline}
+ \begin{block}{Implémentation astucieuse}
  \begin{itemize}
      \item La taille du \mintinline{cpp}{vector} ne correspond pas la taille du tableau alloué.
-    \item Quand on atteint la taille maximale du tableau, on réalloue en multipliant cette taille par un facteur $\alpha$.
+    \item Quand on atteint la taille maximale du tableau, on réalloue en multipliant cette taille par un facteur $m$.
  \end{itemize}
  \end{block}
 
- \begin{exampleblock}{Complexité}
+ \begin{exampleblock}<2>{Complexité}
      \centering
      $O(1)$ (en moyenne, $O(n)$ quand la taille maximale est atteinte)
  \end{exampleblock}
@@ -544,7 +521,7 @@ Comme dans le cas de la pile : \texttt{push} et \texttt{pop}.
 
 \begin{frame}[fragile]{File : implémentation}
 \begin{columns}
-\begin{column}{0.5\linewidth}
+\begin{column}{0.40\linewidth}
     \begin{minted}{cpp}
     class File{
       std::vector<double> v;
@@ -563,7 +540,7 @@ Comme dans le cas de la pile : \texttt{push} et \texttt{pop}.
     }
     \end{minted}
 \end{column}
-\begin{column}{0.5\linewidth}   
+\begin{column}{0.60\linewidth}   
     \begin{minted}{cpp}
     bool File::empty() const {
       return (debut==fin) ;
@@ -574,7 +551,8 @@ Comme dans le cas de la pile : \texttt{push} et \texttt{pop}.
       return v[debut];
     }
     
-    // Arithmétique modulo la taille de la file
+    // Arithmétique modulo la
+    // taille de la file
     int File::modulo(int i){
       if(v.capacity()==0)
         return 0;
@@ -586,8 +564,9 @@ Comme dans le cas de la pile : \texttt{push} et \texttt{pop}.
 \end{frame}
 
 \begin{frame}[fragile]{File : implémentation}
+\vspace{1em}
 \begin{columns}
-\begin{column}{0.55\textwidth}
+\begin{column}{0.7\textwidth}
     \begin{minted}{cpp}
     // Ajout d'un élément
     void File::push(double d){
@@ -609,9 +588,10 @@ Comme dans le cas de la pile : \texttt{push} et \texttt{pop}.
     }
     \end{minted}
 \end{column}
-\begin{column}{0.45\textwidth}
+\begin{column}{0.4\textwidth}
     \begin{minted}{cpp}
-    // Retrait de l'élément de tête
+    // Retrait de l'élément
+    // de tête
     double File::pop(){
         double d = front();
         debut = modulo(debut+1);
@@ -676,9 +656,8 @@ On lie simplement les maillons précédents et suivants afin d'éviter le maillo
 \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{La liste : implémentation}
-On crée un tableau de maillons, ces maillons pointes sur les différentes cases du tableau.
+\begin{frame}[fragile]{La liste : implémentation}
+On crée un tableau de maillons, ces maillons pointent sur les différentes cases du tableau.
 \begin{minted}{cpp}
 class Chainon{
   public:
@@ -688,18 +667,18 @@ class Chainon{
 \end{minted}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{La liste : implémentation - insertion}
+\begin{frame}[fragile]{La liste : implémentation - insertion}
 On veut insérer l'élément $\text{elem}$ juste après l'indice $i$. Il est placé dans le tableau à la case d'indice $j$.
 \begin{minted}{cpp}
 t[j].val = elem; // assignation de elem dans la liste
 t[j].prev = i;
-t[j].next = t[i].next;
 // t[j] est maintenant chaîné au successeur de t[i]
-t[i].next = j;
+t[j].next = t[i].next;
 // le nouveau successeur de t[i] est désormais t[j]
+t[i].next = j;
+// Par convention, -1 signifie que l'élément suivant n'existe pas
+// (fin de la liste)
 if(t[j].next != -1){
-// Par convention, -1 signifie que l'élément suivant n'existe pas (fin de la liste)
   t[t[j].next].prev = j;
 }
 \end{minted}
@@ -708,19 +687,18 @@ if(t[j].next != -1){
 \begin{frame}[fragile]
 \frametitle{La liste : implémentation - suppression}
 \begin{minted}{cpp}
+// On chaîne le prédécesseur s'il existe
 if(t[i].prev != -1){
-  // On chaîne le prédécesseur s'il existe
   t[t[i].prev].next = t[i].next;
 }
+// On chaîne le successeur s'il existe
 if(t[i].next !=-1){
-  // On chaîne le successeur s'il existe
   t[t[i].next].prev = t[i].prev;
 }
 \end{minted}
 \end{frame}
 
-\begin{frame}
-\frametitle{La liste : implémentation réelle}
+\begin{frame}{La liste : implémentation réelle}
 
 \begin{block}{Pointeurs}
 En pratique les champs \texttt{next} et \texttt{prev} sont des adresses mémoires, c'est-à-dire des pointeurs sur les chaînons.
@@ -738,7 +716,7 @@ Implémentation standard : classe \texttt{std::list} (\texttt{\#include <list>})
 \frametitle{Les itérateurs}
 Les itérateurs sont des éléments de la \textbf{STL}, qui permettent de parcourir les structures comme les listes, les piles, les files, les vecteurs, \dots
 
-Ainsi si une pile ne donne accès qu'au premier élément, on peut quand même parcourir tout les éléments.
+Ainsi, si une pile ne donne accès qu'au premier élément, on peut quand même parcourir tout les éléments.
 
 \begin{minted}{cpp}
 vector<double>::iterator it = vect.begin();
@@ -782,7 +760,7 @@ erase & $O(N)$ & - & - & $O(1)$\\
 \begin{frame}{Autres structures classiques}
 \begin{itemize}
 \item \texttt{set} : un ensemble dans lequel un élément ne peut-être présent qu'une fois
-\item \texttt{map} : associe à un élément une clé qui permet de le retrouver rapidement ($simeq$ dictionnaires Python)
+\item \texttt{map} : associe à un élément une clé qui permet de le retrouver rapidement ($\simeq$ dictionnaires Python)
 \item \texttt{hashmap} : similaire à une \texttt{map}, mais les élément sont indexés avec une fonction de hachage pour accélérer les temps d'accès.
 \item La file de priorité : files dont les éléments sortent par ordre de priorité.
 \item Les graphes : généralisation des listes chaînées (réseaux, arbres de dépendances, \dots)
@@ -790,4 +768,3 @@ erase & $O(N)$ & - & - & $O(1)$\\
 \end{frame}
 
 \end{document}
-
