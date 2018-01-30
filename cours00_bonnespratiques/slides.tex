@@ -1,47 +1,20 @@
-\documentclass{beamer}
-%\usepackage[utf8]{inputenc}
-%\usepackage[T1]{fontenc}
-\usepackage[french]{babel}
-\usepackage{hyperref}
-\usepackage{graphicx}
-\usepackage{amsmath,amssymb}
-\usepackage{tabularx}
-\usepackage{booktabs}
-\usepackage[compatibility=false]{caption}
-\usepackage[toc,page]{appendix}
-\usepackage{minted}
-
-\newcolumntype{Y}{>{\centering\arraybackslash}X}
-
-\usetheme[numbering=fraction,block=fill,progressbar=frametitle]{metropolis} %Use metropolis theme
-
-\definecolor{bg}{rgb}{0.95,0.95,0.95}
-\setminted{bgcolor=bg,fontsize=\tiny,autogobble,mathescape,breaklines,tabsize=2}
-\setmintedinline{fontsize=\normalsize}
-
-\begin{document}
-%\setbeamertemplate{blocks}[rounded]
-\title{Bonnes pratiques de programmation en C++}
-\date[15 fév. 2017]{Mercredi 15 février 2017}
-\author[nicolas.audebert@onera.fr]{Nicolas Audebert}
-\institute{}
-%\titlegraphic{\includegraphics[width=0.3\textwidth]{logo-ponts}}
-
-\setmainfont{Fira Sans}
+\input{../preamble.tex}
+\date[30 janv. 2017]{Mercredi 30 janvier 2018}
+\subtitle{Bonnes pratiques de programmation en C++}
 \maketitle
 
 \begin{frame}{Bien travailler en C++}
 
 \begin{block}{Compiler souvent}
     \begin{itemize}
-        \item Compiler permet de s'assurer qu'il n'y a pas d'erreur de type (exemple : \mintinline{cpp}{std::string} au lieu d'un \mintinline{cpp}{float})
-        \item Compiler permet de s'assurer qu'il n'y a pas d'erreur de syntaxe (exemple : oubli d'un \texttt{;})
-        \item Compiler permet de lever des avertissements : variables déclarées mais non utilisées, transtypages douteux, etc.
+        \item Compiler permet de s'assurer qu'il n'y a pas d'\textbf{erreur de type} (exemple : \mintinline{cpp}{std::string} au lieu d'un \mintinline{cpp}{float})
+        \item Compiler permet de s'assurer qu'il n'y a pas d'\textbf{erreur de syntaxe} (exemple : oubli d'un \texttt{;})
+        \item Compiler permet de lever des \textbf{avertissements} : variables déclarées mais non utilisées, transtypages douteux, etc.
     \end{itemize}
 \end{block}
 
 \begin{block}{Dans son environnement de développement}
-QtCreator et VisualStudio permettent de compiler en un clic. Abusez-en.
+\textbf{QtCreator} et \textbf{VisualStudio} permettent de compiler en un clic. Abusez-en.
 \end{block}
 
 \end{frame}
@@ -49,7 +22,7 @@ QtCreator et VisualStudio permettent de compiler en un clic. Abusez-en.
 \begin{frame}[fragile]{Style de programmation}
 
 \begin{block}{Accolades}
-Choisir un style et s'y tenir.
+Choisir un style et s'y \textbf{tenir}.
 \end{block}
 
 \begin{columns}
@@ -93,7 +66,7 @@ Choisir un style et s'y tenir.
 \begin{frame}[fragile]{Style de programmation}
 
 \begin{block}{Noms de fonctions, variables, classes}
-On préférera utiliser la \mintinline{cpp}{CamelCase} pour les classes et la \mintinline{cpp}{snake_case} pour tout le reste.\\
+On préférera utiliser la \mintinline{cpp}{CamelCase} pour les classes et la \mintinline{cpp}{snake_case} pour tout le reste.
 \end{block}
 
 \begin{exampleblock}{Exemple}
@@ -106,7 +79,7 @@ class Cluster {
     get_average_color();
 };
 
-Cluster::get_average_color(){
+Color Cluster::get_average_color(){
   return Color(r,g,b);
 }
 \end{minted}
@@ -119,29 +92,34 @@ Cluster::get_average_color(){
 \end{block}
 
 \begin{columns}
-    \begin{column}{0.57\textwidth}
+    \begin{column}{0.52\textwidth}
     \begin{minted}{cpp}
     // NON ! Code peu élégant
     bool Cluster::operator==(Cluster C){
         bool est_egal=true;
-        if (n!=C.n || r!=C.r || g!=C.g || b!=C.b){
+        if (n!=C.n || r!=C.r ||
+            g!=C.g || b!=C.b){
             est_egal=false;
         }
         return est_egal;
     }
     \end{minted}
     \end{column}
-    \begin{column}{0.57\textwidth}
+    \begin{column}{0.52\textwidth}
     \begin{minted}{cpp}
     // Version plus claire
     bool Cluster::operator==(Cluster C){
-        bool egal = n == C.n && r == C.r && g == C.g && b == C.b;
+        bool egal = n == C.n &&
+                    r == C.r &&
+                    g == C.g &&
+                    b == C.b;
         return egal;
     }
 
     // On peut même directement écrire 
     bool Cluster::operator==(Cluster C){
-        return (n == C.n && r == C.r && g == C.g && b == C.b);
+        return (n == C.n && r == C.r &&
+                g == C.g && b == C.b);
     }
     \end{minted}
     \end{column}
@@ -150,7 +128,7 @@ Cluster::get_average_color(){
 
 \begin{frame}[fragile]{Style de programmation}
 \begin{block}{Indentation}
-Chaque bloc doit être indenté et si possible mis en valeur par des accolades.
+Chaque bloc doit être \textbf{indenté} et si possible mis en valeur par des accolades.
 \end{block}
 
 \begin{columns}
@@ -187,7 +165,7 @@ Chaque bloc doit être indenté et si possible mis en valeur par des accolades.
 \begin{itemize}
     \item Indentation correcte (pas de bloc mal indenté)
     \item Noms de variables et de fonctions clairs
-    \item Du code commenté
+    \item Du code \textbf{commenté}
 \end{itemize}
 \end{block}
 
@@ -195,34 +173,34 @@ Chaque bloc doit être indenté et si possible mis en valeur par des accolades.
     \begin{column}{0.4\textwidth}
     \begin{minted}{cpp}
     bool Vector::nul const (){
-        if size()==0
-            return true;
-        int n = size();
-        int res = 0;
-        for(int i=0; i<n; i++){
-            res = res + tab[i];
-        }
-        if res == 0
-            return true;
-        return false;
+      if (size()==0)
+        return (true);
+      int n = size();
+      int res = 0;
+      for(int i=0; i<n; i++){
+        res = (res + tab[i]);
+      }
+      if (res == 0)
+        return true;
+      return false;
     }
     \end{minted}
     \end{column}
     \begin{column}{0.6\textwidth}
     \begin{minted}{cpp}
-    // Détermine si la somme du vecteur est nulle
+    // Détermine si la somme du vecteur = 0
     // Ne modifie pas le vecteur
-    bool Vector::est_nul() const {
-        // On vérifie que le vecteur a une taille > 0 pour accéder aux valeurs
-        int taille = size();
-        if taille == 0
-            return true;
-        int somme = 0;
-        // Calcul de la somme des éléments de tab
-        for(int i=0; i<taille; i++){
-            somme += tab[i];
-        }
-        return somme == 0;
+    bool Vector::somme_nulle() const {
+      // On vérifie que le vecteur a une
+      // taille > 0 pour accéder aux valeurs
+      int taille = size();
+      if taille == 0
+          return true;
+      int somme = 0;
+      // Calcul de la somme des éléments
+      for(int i=0; i<taille; i++)
+          somme += tab[i];
+      return (somme == 0);
     }
     \end{minted}
     \end{column}
