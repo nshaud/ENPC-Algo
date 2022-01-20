@@ -8,28 +8,29 @@
 \usepackage[compatibility=false]{caption}
 \usepackage[toc,page]{appendix}
 \usepackage{minted}
+\usepackage{xspace}
 
 \setminted{autogobble}
 
 \setbeamercovered{transparent}
-\makeatletter
-  \def\beamer@calltheme#1#2#3{%
-    \def\beamer@themelist{#2}
-    \@for\beamer@themename:=\beamer@themelist\do
-    {\usepackage[{#1}]{\beamer@themelocation/#3\beamer@themename}}}
-
-  \def\usefolder#1{
-    \def\beamer@themelocation{#1}
-  }
-  \def\beamer@themelocation{}
-
-\patchcmd{\minted@colorbg}{\noindent}{\medskip\noindent}{}{}
-\apptocmd{\endminted@colorbg}{\par\medskip}{}{}
-\makeatother
+%\makeatletter
+%  \def\beamer@calltheme#1#2#3{%
+%    \def\beamer@themelist{#2}
+%    \@for\beamer@themename:=\beamer@themelist\do
+%    {\usepackage[{#1}]{\beamer@themelocation/#3\beamer@themename}}}
+%
+%  \def\usefolder#1{
+%    \def\beamer@themelocation{#1}
+%  }
+%  \def\beamer@themelocation{}
+%
+%\patchcmd{\minted@colorbg}{\noindent}{\medskip\noindent}{}{}
+%\apptocmd{\endminted@colorbg}{\par\medskip}{}{}
+%\makeatother
 
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 
-\usefolder{../theme}
+%\usefolder{../theme}
 \usetheme[numbering=fraction,block=fill,progressbar=frametitle]{metropolis} %Use metropolis theme
 
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
@@ -40,7 +41,7 @@
 \begin{document}
 
 \title[Cours d'algorithmique]{Algorithmique et structures de données}
-\author[nicolas.audebert@onera.fr]{Nicolas Audebert}
+\author[nicolas.audebert@lecnam.net]{Nicolas Audebert}
 \setmainfont{Fira Sans}
 
 
