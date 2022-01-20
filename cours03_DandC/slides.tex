@@ -1,5 +1,5 @@
 \input{../preamble.tex}
-\date[14 fév. 2018]{Mercredi 14 février 2018}
+\date[14 fév. 2022]{Lundi 14 février 2022}
 \subtitle{Diviser pour régner}
 \maketitle
 
@@ -7,15 +7,15 @@
 
 \begin{frame}{Les tris}
 
-Il existe de nombreux algorithmes de tris :
+Il existe de nombreux algorithmes de tris:
 \begin{itemize}
   \item en complexité quadratique $O(n^2)$ (tri à bulles, tri par insertion, tri par sélection\dots)
-  \item en complexité linéarithmique en moyenne $O(n.log(n))$ (tri rapide)
-  \item en complexité linéarithmique dans le pire cas $O(n.log(n))$ (tri par tas, tri fusion)
+  \item en complexité linéarithmique en moyenne $O(n\cdot \log(n))$ (tri rapide)
+  \item en complexité linéarithmique dans le pire cas $O(n\cdot \log(n))$ (tri par tas, tri fusion)
 \end{itemize}
 
-\begin{block}<2>{Complexité minimale du problème de triage}
-Dans le cas général, la complexité d'un algorithme de tri est $O(n.log(n))$.
+\begin{block}<2->{Complexité minimale des tris}
+Dans le cas général, un algorithme de tri est au moins $O(n\cdot \log(n))$.
 \end{block}
 
 \begin{exampleblock}<3>{En pratique}
@@ -36,19 +36,19 @@ Diviser un problème en sous-problèmes plus petits, plus faciles à résoudre.
 
 \end{frame}
 
-\section{Quicksort}
+\subsection{Quicksort}
 
-\begin{frame}{Principe - Rappel}
+\begin{frame}{Rappel -- principe du tri rapide}
 \begin{center}
 \includegraphics[width=\linewidth]{images/quicksort.pdf}
 \end{center}
 \end{frame}
 
-\begin{frame}{QuickSort : complexité}
+\begin{frame}{QuickSort: complexité}
  Le parcours du tableau implique $N-1$ comparaison. Puis on réitère l'opération sur chaque moitié de tableau.
  
- En notant $i$ la position du pivot, la complexité s'écrit~:
- $$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1} + {\color{green!50!black} Moy_i[C_{moy}(i-1) + C_{moy}(N-i)]}~~,$$
+ En notant $i$ la position du pivot, la complexité s'écrit:
+ $$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1} + {\color{green!50!black} \mathbb{E}[C_{moy}(i-1) + C_{moy}(N-i)]}~~,$$
  
  car le tri du tableau de longueur $N$ implique:
  \begin{itemize}
@@ -58,73 +58,72 @@ Diviser un problème en sous-problèmes plus petits, plus faciles à résoudre.
  \end{itemize}
 \end{frame}
 
-\begin{frame}{QuickSort : complexité}
- Le pivot peut se retrouver à {\color{purple}n'importe quelle position} de {\color{brown}façon équiprobable}~:
- $$\color{green!50!black} Moy_i[C_{moy}(i-1) + C_{moy}(N-i)] = {\color{brown} \frac{1}{N} \sum_{{\color{purple} p=1}}^{{\color{purple} N}}}  C_{moy}({\color{purple} p-1}) + C_{moy}({\color{purple} N-p})$$
- \uncover<2>{
- En réinjectant dans la complexité moyenne~:
- $$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1 } + {\color{green!50!black} {\color{brown} \frac{1}{N} \sum_{{\color{purple} p=1}}^{{\color{purple} N}}}  C_{moy}({\color{purple} p-1}) + C_{moy}({\color{purple} N-p})}~~.$$
+\begin{frame}{QuickSort: complexité}
+ Le pivot peut se retrouver à {\color{purple}n'importe quelle position} de {\color{brown}façon équiprobable}:
+$$\color{green!50!black} \mathbb{E}[C_{moy}(i-1) + C_{moy}(N-i)] = {\color{brown} \frac{1}{N} \sum_{{\color{purple} p=1}}^{{\color{purple} N}}}  \left[ C_{moy}({\color{purple} p-1}) + C_{moy}({\color{purple} N-p})\right]$$
+
+\uncover<2>{
+puis, en réinjectant dans la complexité moyenne:
+$$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1 } + {\color{green!50!black} {\color{brown} \frac{1}{N} \sum_{{\color{purple} p=1}}^{{\color{purple} N}}} \left[ C_{moy}({\color{purple} p-1}) + C_{moy}({\color{purple} N-p}) \right]}~~.$$
  }
 \end{frame}
 
-\begin{frame}{QuickSort : complexité}
+\begin{frame}{QuickSort: complexité}
 
- $$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1 } + {\color{green!50!black} {\color{brown} \frac{1}{N} \sum_{{\color{purple} p=1}}^{{\color{purple} N}}}  C_{moy}({\color{purple} p-1}) + C_{moy}({\color{purple} N-p})}~~.$$
+ $$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1 } + {\color{green!50!black} {\color{brown} \frac{1}{N} \sum_{{\color{purple} p=1}}^{{\color{purple} N}}}  C_{moy}({\color{purple} p-1}) + {\color{brown} \frac{1}{N} \sum_{{\color{purple} p=1}}^{{\color{purple} N}}} C_{moy}({\color{purple} N-p})}~~.$$
 
  \uncover<2->{
- Un changement de variable $q = N - p$ dans la seconde somme donne :
+ Un changement de variable $q = N - p$ dans la seconde somme donne:
  $$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1} + {\color{green!50!black} \frac{1}{N} \sum_{p=1}^N  C_{moy}(p-1) + \frac{1}{N} \sum_{q=1}^N  C_{moy}(q-1)} $$
  }
 
  \uncover<3->{
- Autrement dit, la complexité se réécrit~:
+ Autrement dit, la complexité se réécrit:
  $$ {\color{blue} C_{moy}(N)} = {\color{red} N - 1} + {\color{green!50!black} \frac{2}{N} \sum_{p=1}^N  C_{moy}(p-1)}$$
  }
 \end{frame}
 
-\begin{frame}{QuickSort : complexité}
- En multipliant par $N$ des deux côtés~:
+\begin{frame}{QuickSort: complexité}
+ En multipliant par $N$ des deux côtés:
  $$ N {\color{blue} C_{moy}(N)} = N{\color{red} (N - 1)} + {\color{green!50!black} 2 \sum_{p=1}^N  C_{moy}(p-1)}~~~{\color{magenta} (a)}$$
  
- \uncover<2->{En outre, pour un tableau de taille $N-1$, la relation ${\color{magenta} (a)}$ se réécrit~:
+ \uncover<2->{En outre, pour un tableau de taille $N-1$, la relation ${\color{magenta} (a)}$ se réécrit:
  $$ (N-1) {\color{blue} C_{moy}(N-1)} = (N-1).{\color{red} (N - 2)} + {\color{green!50!black} 2 \sum_{p=1}^{N-1}  C_{moy}(p-1)}~~.~~{\color{magenta} (b)}$$}
  
  \uncover<3->{
-	En calculant $\color{magenta} (a) - (b)$, il vient~:
+	En calculant $\color{magenta} (a) - (b)$, il vient:
 	$$ N {\color{blue} C_{moy}(N)} - (N - 1) {\color{yellow!50!black} C_{moy}(N-1)} = {\color{red} 2N} + {\color{yellow!50!black} 2C_{moy}(N-1)}~~.$$
  }
 \end{frame}
 
-\begin{frame}{QuickSort : complexité}
-	En simplifiant~:
+\begin{frame}{QuickSort: complexité}
+	En simplifiant:
 	$$ N{\color{blue} C_{moy}(N)} = {\color{red} 2N} + {\color{yellow!50!black} (N+1) C_{moy}(N-1)}~~.$$
 	
-	\uncover<2->{On divise par $N(N+1)$ :
+	\uncover<2->{On divise par $N(N+1)$:
 	$$ \frac{\color{blue} C_{moy}(N)}{N+1} = {\color{red} \frac{2}{N+1}} + {\color{yellow!50!black} \frac{C_{moy}(N-1)}{N}}$$}
 	
-	\uncover<3->{Puis par récurrence :
+	\uncover<3->{Puis par récurrence:
 	$$ \frac{\color{blue} C_{moy}(N)}{N+1} = {\color{red} \sum_{k=3}^{N+1} \frac{2}{k}} + {\color{yellow!50!black} \frac{C_{moy}(1)}{2}}$$}
 \end{frame}
 
-\begin{frame}{QuickSort : complexité}
+\begin{frame}{QuickSort: complexité}
 
- Comme :
- $$\color{red} \sum_{k=1}^{N} \frac{1}{k}\sim_{N \rightarrow \infty} log(N) $$
+ Comme:
+	$$\color{red} \sum_{k=1}^{N} \frac{1}{k}\underset{N \rightarrow \infty}{\sim} \log(N) $$
 
 \uncover<2>{
- il vient\,:
+ en remplaçant dans la complexité moyenne, on obtient l'équivalence
 
- $${\color{blue} C_{moy}(N)} \sim_{N \rightarrow \infty} (N+1) {\color{red} log(N)} + (N+1) {\color{yellow!50!black} \frac{C_{moy}(1)}{2}}$$
+$${\color{blue} C_{moy}(N)} \underset{N \rightarrow \infty}{\sim} (N+1) {\color{red} log(N)} + (N+1) {\color{yellow!50!black} \frac{C_{moy}(1)}{2}}$$
 }
- Finalement\,:
-\begin{block}<3>{}
- $$C_{moy}(N) = O(N \log(N))$$
- \end{block}
+ Finalement:
+$$\boxed{C_{moy}(N) = O(N \log(N))}$$
 
 \end{frame}
 
 
-\section{Tri fusion}
+\subsection{Tri fusion}
 
 \begin{frame}{Tri fusion}
 
@@ -145,16 +144,16 @@ Le principe du tri fusion est proche du tri rapide. L'idée est de couper un tab
 \frametitle{Calcul de la complexité}
 \framesubtitle{Tri fusion}
 
-Le parcours du tableau implique $\color{red} N-1$ comparaison. Donc :
+Le parcours du tableau implique $\color{red} N-1$ comparaison. Donc:
 $$ {\color{blue} C_N} = {\color{red} (N-1)} + {\color{green!50!black} C_i + C_{N-i-1}}$$
-\uncover<2->{En moyenne, $i \simeq \frac{N}{2}$\,:
-$$ {\color{blue} C_N} = {\color{red} N} + {\color{green!50!black} 2* C_{\frac{N}{2}}}$$}
-\uncover<3->{Au rang suivant :
-$$ {\color{blue} C_N} = {\color{red} 2N} + {\color{green!50!black} 4* C_{\frac{N}{4}}}$$}
-\uncover<4->{Puis :
-$$ {\color{blue} C_N} = {\color{red} k N} + {\color{green!50!black} 2^k * C_{\frac{N}{2^k}}}$$}
-\uncover<5->{La récurrence se termine après $k = log_2(N)$ étapes, donc\,:
-$$C_N = N \log N + N C_1 = O(N \log N)$$}
+\uncover<2->{En moyenne, $i \simeq \frac{N}{2}$:
+$$ {\color{blue} C_N} = {\color{red} N} + {\color{green!50!black} 2 \cdot C_{\frac{N}{2}}}$$}
+\uncover<3->{Au rang suivant:
+$$ {\color{blue} C_N} = {\color{red} 2N} + {\color{green!50!black} 4 \cdot C_{\frac{N}{4}}}$$}
+\uncover<4->{Puis:
+$$ {\color{blue} C_N} = {\color{red} k N} + {\color{green!50!black} 2^k \cdot C_{\frac{N}{2^k}}}$$}
+\uncover<5->{La récurrence se termine après $k = log_2(N)$ étapes, donc:
+$$\boxed{C_N = N \log N + N C_1 = O(N \log N)}$$}
 \end{frame}
 
 \begin{frame}
@@ -162,38 +161,38 @@ $$C_N = N \log N + N C_1 = O(N \log N)$$}
  Le tri fusion est un $O(N\log(N))$ dans tous les cas. Cependant il est en moyenne plus lent que Quicksort, c'est pourquoi ce dernier est le plus utilisé.
 \end{frame}
 
-\section{Fast Fourier Transform}
+\section{Transformée de Fourier rapide}
 
-\begin{frame}{Discrete Fourier Transform}
-La Transformée de Fourier discrète est un algorithme important en traitement du signal et des images.
+\begin{frame}{Transformée de Fourier discrète}
+La transformée de Fourier discrète (\emph{Discrete Fourier Transform} ou DFT) est un algorithme central en traitement du signal et des images.
 
 \centering
 \includegraphics[width=0.5\textwidth]{images/fourier}
 
 \end{frame}
 
-\begin{frame}{DFT: construction}
-Soit l'espace complexe $\mathbb{C}^N$ et la forme hermitienne :
+\begin{frame}{DFT: construction (1/2)}
+Soit l'espace complexe $\mathbb{C}^N$ et la forme hermitienne:
 \[\langle f,g \rangle = \sum_{j=0}^{N-1}f[k]\overline{g[k]}.\]
 
-La famille des vecteur $e_k$ :
+La famille des vecteur $e_k$:
 \[ e_k = \frac{1}{\sqrt{N}}\begin{pmatrix}
 e^{\frac{2i\pi}{N} 0\cdot k}, & e^{\frac{2i\pi}{N} 1\cdot k}, & \dots, & e^{\frac{2i\pi}{N} (N-1)\cdot k}
 \end{pmatrix}\]
-pour $k=0,\ldots,N-1$ est une famille libre orthonormale (donc une base).
+pour $k=0, \ldots, N-1$ est une famille libre orthonormale (donc une base).
 \end{frame}
 
-\begin{frame}{DFT: construction 2}
+\begin{frame}{DFT: construction (2/2)}
 Soit $f$ un tableau de $N$ nombres complexes.
-Comme $(e_0,e_1,\dots, e_{N-1})$ est une base :
+Comme $(e_0,e_1,\dots, e_{N-1})$ est une base, $f$ se décompose de la façon suivante:
 
 \[f = \sum_{j=0}^{N-1} \langle f,e_j \rangle \, e_j\]
 
-Les coordonnées de $f$ dans la nouvelle base sont celles de la $DFT$ de $f$.
+Les coefficients de la transformée de Fourier discrète de $f$ sont les coordonnées de $f$ dans cette nouvelle base.
 \end{frame}
 
 
-\begin{frame}{DFT : expression}
+\begin{frame}{Calcul de la DFT}
 	\begin{alertblock}{Expression}
 	La transformée de Fourier discrète transforme un tableau $f$ de $N$ nombres complexes en un tableau $DFT(f)$ de même taille par l'opération suivante:
 	\[DFT(f)[k] = \langle f,e_j \rangle =  \frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}f[j]e^{-\frac{2i\pi}{N} jk}.\]
@@ -204,30 +203,30 @@ Les coordonnées de $f$ dans la nouvelle base sont celles de la $DFT$ de $f$.
 	\end{exampleblock}
 \end{frame}
 
-\begin{frame}{DFT : transformée inverse}
+\begin{frame}{DFT: transformée inverse}
 Soit $f$ un tableau de $N$ nombres complexes.
-Comme $(e_0,e_1,\dots, e_{N-1})$ est une base :
+Comme $(e_0,e_1,\dots, e_{N-1})$ est une base:
 
 \[f = \sum_{j=0}^{N-1} \langle f,e_j \rangle \, e_j\]
 
-ou encore :
+ou encore:
 
 \[f = \sum_{j=0}^{N-1} DFT(f)[j] \, e_j\]
 
 \end{frame}
-\begin{frame}{DFT : transformée inverse}
+\begin{frame}{DFT: transformée inverse}
 \[f = \sum_{j=0}^{N-1} DFT(f)[j] \, e_j\]
 \[f[k] = \left( \sum_{j=0}^{N-1} DFT(f)[j] \, e_j \right) [k] \]
 \[f[k] = 
 \frac{1}{\sqrt{N}}  \sum_{j=0}^{N-1} DFT(f)[j] e^{+\frac{2i\pi}{N} jk}  \]
 
-Notant $IDFT$ la transformée inverse ($IDFT\circ DFT = Id$) :
+Notant $IDFT$ la transformée inverse ($IDFT\circ DFT = Id$):
 
 \[f[k] =  IDFT(DFT(f))[k] = \frac{1}{\sqrt{N}}  \sum_{j=0}^{N-1} DFT(f)[j] e^{+\frac{2i\pi}{N} jk} \]
 \end{frame}
 
 \begin{frame}{DFT}
-Pour résumer, $f$ un tableau de $N$ nombres complexes :
+Pour résumer, $f$ un tableau de $N$ nombres complexes:
 \begin{alertblock}{Discrete Fourier Transform}
 \[DFT(f)[k] =  \frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}f[j]e^{-\frac{2i\pi}{N} jk}.\]
 \end{alertblock}
@@ -248,12 +247,12 @@ La transformée de Fourier transformes les convolutions (= opérations de filtra
 
 \end{frame}
 
-\begin{frame}{DFT : complexité a priori}
+\begin{frame}{DFT: complexité a priori}
 \[DFT(f)[k] =  \frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}f[j]e^{-\frac{2i\pi}{N} jk}.\]
-Calculer un terme : $O(N)$.
+Calculer un terme: $O(N)$.
 
 \vspace{0.5cm}
-Calculer tous les termes : $ O(N^2)$
+Calculer tous les termes: $ O(N^2)$
 \end{frame}
 
 \begin{frame}{Fast Fourier Transform}
@@ -281,32 +280,40 @@ dont on déduit facilement
 \end{frame}
 
 \begin{frame}{FFT: algorithme}
-On retrouve en fait le calcul de la transformée de Fourier discrète sur les deux sous-tableaux\,:
+On retrouve en fait le calcul de la transformée de Fourier discrète sur les deux sous-tableaux:
 \begin{equation}
 \sqrt{N} DFT(f)[k] = \sqrt{\frac{N}{2}}
 \left(
-{\color{red} DFT(f_{pair})[k]} + {\color{green!50!black} e^{-\frac{2i\pi}{N}k}} {\color{blue} DFT(f_{impair})[k]}
+{\color{red} DFT(f_\text{pair})[k]} + {\color{green!50!black} e^{-\frac{2i\pi}{N}k}} {\color{blue} DFT(f_\text{impair})[k]}
 \right)
 \end{equation}
- où $f_{pair}$ est le sous-tableau des indices pairs de $f$ et
- $f_{impair}$ est celui des indices impairs.
+\begin{itemize}
+	\item $f_\text{pair}$ est le sous-tableau des indices pairs de $f$: \mintinline{python}{f[0:n:2]};
+	\item $f_\text{impair}$ est celui des indices impairs: \mintinline{python}{f[1:n:2]}.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{FFT: algorithme}
-Le problème est alors de :
+\begin{equation}
+\sqrt{N} DFT(f)[k] = \sqrt{\frac{N}{2}}
+\left(
+{\color{red} DFT(f_\text{pair})[k]} + {\color{green!50!black} e^{-\frac{2i\pi}{N}k}} {\color{blue} DFT(f_\text{impair})[k]}
+\right)
+\end{equation}
+Le problème est alors de:
 \begin{enumerate}
-\item Calculer la DFT des indices pairs de $f$.
-\item Calculer la DFT des indices impairs de $f$.
-\item Combiner en $O(N)$ les deux suivant la formule ci-dessus.
+    \item Calculer la DFT des indices pairs de $f$.
+    \item Calculer la DFT des indices impairs de $f$.
+    \item Combiner en $O(N)$ les deux suivant la formule ci-dessus.
 \end{enumerate}
 \end{frame}
 
 \begin{frame}{Complexité}
-Comme pour le tri fusion :
+Le calcul de complexité de la FFT (\emph{Fast Fourier Transform}) est analogue à celle du tri fusion:
 \begin{itemize}
-\item calcul sur les tableau de taille $N/2$
-\item relation de récurrence $C(N) \approx N + 2*C(\frac{N}{2})$
-\item complexité en $O(N \log(N))$
+    \item calcul sur les tableau de taille $N/2$
+    \item relation de récurrence $C(N) \approx N + 2*C(\frac{N}{2})$
+    \item complexité en $O(N \log(N))$
 \end{itemize}
 \end{frame}
 
@@ -318,7 +325,7 @@ $$
 \right)
 $$
 \only<1>{
-Relation de récurrence :
+Relation de récurrence:
 \begin{enumerate}
 \item Calculer la DFT des indices pairs de $f$.
 \item Calculer la DFT des indices impairs de $f$.
@@ -327,12 +334,12 @@ Relation de récurrence :
 }
 \only<2>{
 Les sous DFT sont de longueur $N/2$, donc définies pour $0 \leq k \leq N/2$.
-On utilise :
-$$\exp(-\frac{2i\pi}{N/2}j(k+N/2)) =  \exp(-\frac{2i\pi}{N/2}jk)$$
-$$\exp(-\frac{2i\pi}{N}(k+N/2)) =  \exp(-\frac{2i\pi}{N}k)$$
-c'est-à-dire qu'il y a périodicité de la DFT\,:
-$$DFT_{paire}[k + \frac{N}{2}] = DFT_{paire}[k],$$
-$$DFT_{impaire}[k + \frac{N}{2}] = DFT_{impaire}[k]~~.$$
+En remarquant que:
+$$\exp\left(-\frac{2i\pi}{N/2}j(k+N/2)\right) =  \exp\left(-\frac{2i\pi}{N/2}jk\right)$$
+$$\exp\left(-\frac{2i\pi}{N}(k+N/2)\right) =  \exp\left(-\frac{2i\pi}{N}k\right)$$
+on s'aperçoit qu'il y a périodicité de la DFT:
+$$DFT_\text{paire}\left[k + \frac{N}{2}\right] = DFT_\text{paire}[k],$$
+$$DFT_\text{impaire}\left[k + \frac{N}{2}\right] = DFT_\text{impaire}[k]~~.$$
 }
 \only<3>{
 \begin{enumerate}
@@ -363,22 +370,22 @@ f[k+N/2] \leftarrow \texttt{buffer}[2*k]&-e^{-\frac{2i\pi}{N}k}\,\texttt{buffer}
 Il est possible de définir un équivalent de dérivation pour la DFT.
 
 Soit $e_j(x) = \frac{1}{\sqrt{N}}\exp(\frac{2i\pi}{N}jx)$.
-Pour $k \in \mathbb{N}$ :  $e_j(k)=e_j[k]$ 
+Pour $k \in \mathbb{N}$:  $e_j(k)=e_j[k]$ 
 
-Soit $f$ la fonction périodique :
+Soit $f$ la fonction périodique:
 \[f(x) = \sum_j DFT(f)[j]e_j(x),\]
 
-et $f(k) = f[k]$ : 
+et $f(k) = f[k]$: 
 
 \[f'(x) = \sum_j DFT(f)[j]e_j'(x)=\sum_j \frac{2i\pi j}{N}DFT(f)[j]e_j(x).\]
 
-Puis : 
+Puis: 
 \[DFT(f')[j] = \frac{2i\pi j}{N}DFT(f)[j].\]
 \end{frame}
 
 \begin{frame}{Dérivation}
 
-Pour les fonctions réelles : il faut que $f'$ soit réelle.
+Pour les fonctions réelles: il faut que $f'$ soit réelle.
 
 \[
 DFT(f')[j] =
@@ -393,14 +400,14 @@ Cette relation est utile pour résoudre certaines équations aux dérivées part
 
 \end{frame}
 
-\section{TP}
-\begin{frame}{TP}
-	TP long : transformée de Fourier rapide et éditeur de Poisson.
+\section{Codons!}
+\begin{frame}{Codons!}
+	TP long: transformée de Fourier rapide et éditeur de Poisson.
 	
 	\begin{block}{Idée}
-	On veut copier/coller un morceau d'image dans une autre. Pour que les transitions soient naturelles, il faut que les variations d'intensité au niveau de la frontière soient égales\,: c'est l'équation de Poisson.
+	Comment copier/coller un morceau d'image dans une autre? Pour que les transitions soient naturelles, il faut que les variations d'intensité au niveau de la frontière soient égales: c'est l'équation de Poisson.
 	
-	On la résout dans l'espace de Fourier, puis on récupère l'image lissée par transformée de Fourier inverse.
+	Cette équation est simple à résoudre dans l'espace de Fourier. Il suffit ensuite de récupèrer l'image lissée en appliquant la transformée de Fourier inverse.
 	\end{block}
 \end{frame}
 \end{document}
