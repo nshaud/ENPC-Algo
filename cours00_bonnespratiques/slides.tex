@@ -1,5 +1,5 @@
 \input{../preamble.tex}
-\date[30 janv. 2017]{Mercredi 30 janvier 2018}
+\date[31 janv. 2022]{Lundi 31 janvier 2022}
 \subtitle{Bonnes pratiques de programmation en C++}
 \maketitle
 
@@ -15,6 +15,8 @@
 
 \begin{block}{Dans son environnement de développement}
 \textbf{QtCreator} et \textbf{VisualStudio} permettent de compiler en un clic. Abusez-en.
+
+\emph{Sous QtCreator: \texttt{Ctrl + B} pour compiler.}
 \end{block}
 
 \end{frame}
@@ -23,9 +25,12 @@
 
 \begin{block}{Accolades}
 Choisir un style et s'y \textbf{tenir}.
+
+\emph{Objectif: lisibilité et cohérence.}
 \end{block}
 
-\begin{columns}
+
+\begin{columns}[T]
     \begin{column}{0.5\textwidth}
     \begin{minted}{cpp}
     // Style K&R
@@ -66,21 +71,21 @@ Choisir un style et s'y \textbf{tenir}.
 \begin{frame}[fragile]{Style de programmation}
 
 \begin{block}{Noms de fonctions, variables, classes}
-On préférera utiliser la \mintinline{cpp}{CamelCase} pour les classes et la \mintinline{cpp}{snake_case} pour tout le reste.
+	On préférera utiliser la \mintinline{cpp}{CamelCase} pour les classes et la \mintinline{cpp}{snake_case} pour tout le reste. Choisir \textbf{une seule} langue entre anglais et français.
 \end{block}
 
 \begin{exampleblock}{Exemple}
 \begin{minted}{cpp}
 class Cluster {
-  private:
-    int r, g, b;
-    int nb_points;
-  public:
-    get_average_color();
+    private:
+        int r, g, b;
+        int nb_points;
+    public:
+        get_average_color();
 };
 
 Color Cluster::get_average_color(){
-  return Color(r,g,b);
+    return Color(r,g,b);
 }
 \end{minted}
 \end{exampleblock}
@@ -88,10 +93,10 @@ Color Cluster::get_average_color(){
 
 \begin{frame}[fragile]{Style de programmation}
 \begin{block}{Écrire du code clair et concis}
-Éviter les parenthèses superflues, les variables inutiles, les lignes à rallonge\dots
+	Éviter les parenthèses superflues, les variables inutiles, les lignes à rallonge\dots{} Pensez à la personne qui va relire!
 \end{block}
 
-\begin{columns}
+\begin{columns}[T]
     \begin{column}{0.52\textwidth}
     \begin{minted}{cpp}
     // NON ! Code peu élégant
@@ -131,7 +136,7 @@ Color Cluster::get_average_color(){
 Chaque bloc doit être \textbf{indenté} et si possible mis en valeur par des accolades.
 \end{block}
 
-\begin{columns}
+\begin{columns}[T]
     \begin{column}{0.5\textwidth}
     \begin{minted}{cpp}
     // NON
@@ -169,7 +174,8 @@ Chaque bloc doit être \textbf{indenté} et si possible mis en valeur par des ac
 \end{itemize}
 \end{block}
 
-\begin{columns}
+\vspace{-1em}
+\begin{columns}[T]
     \begin{column}{0.4\textwidth}
     \begin{minted}{cpp}
     bool Vector::nul const (){
