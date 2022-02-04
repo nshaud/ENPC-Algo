@@ -234,13 +234,13 @@ Le théorème de la complexité minimale des algorithmes de tri n'est valable qu
 
 \begin{frame}[fragile]{Le tri à bulles}
   \begin{minted}{cpp}
-    for(int i=n; i > 0; i--){
+  for(int i=n; i > 0; i--){
       for(int j=0; j < i-1; j++){
-        if(t[j] > t[j+1]){
-          swap(t[j], j[j+1])
-        }
+          if(t[j] > t[j+1]){
+              swap(t[j], j[j+1]);
+          }
       }
-    }
+  }
   \end{minted}
   \begin{block}{Complexité}
     Le tri à bulles réalise $(n-1) + (n-2) + \hdots + 1  = \frac{(n-1)(n-2)}{2}$ comparaisons.
@@ -249,7 +249,7 @@ Le théorème de la complexité minimale des algorithmes de tri n'est valable qu
   \end{block}
   
   \begin{exampleblock}{Autres algorithmes classiques en $O(n^2)$}
-  Le tri par insertion et le tri par sélection sont de complexité quadratique.
+  Le tri par insertion et le tri par sélection (cf. TP).
   \end{exampleblock}
 \end{frame}
 
